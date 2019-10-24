@@ -2,9 +2,9 @@
     <section>
         <!--工具条-->
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-            <el-form :inline="true" :model="filters">
+            <el-form :inline="true" :model="filters" @submit.native.prevent>
                 <el-form-item>
-                    <el-input v-model="filters.LinkUrl" placeholder="接口名"></el-input>
+                    <el-input v-model="filters.LinkUrl" placeholder="标题/内容"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="getRoles">查询</el-button>
@@ -24,9 +24,9 @@
             </el-table-column>
             <el-table-column prop="bID" label="ID" width="100" sortable>
             </el-table-column>
-            <el-table-column prop="btitle" label="标题" width="300" sortable>
+            <el-table-column prop="btitle" label="标题" width="" sortable>
             </el-table-column>
-            <el-table-column prop="bcontent" label="内容"   width="" sortable>
+            <el-table-column prop="bcontent" label="内容"   width="400" sortable>
                 <template slot-scope="scope">
 
 <span v-html="scope.row.bcontent.substring(0,100)"></span>
@@ -35,12 +35,12 @@
             <el-table-column prop="bCreateTime" label="创建时间" :formatter="formatCreateTime" width="250" sortable>
             </el-table-column>
 
-            <!--<el-table-column label="操作" width="150">-->
-                <!--<template scope="scope">-->
-                    <!--<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>-->
-                    <!--<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
+            <el-table-column label="操作" width="150">
+                <template scope="scope">
+                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                    <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+                </template>
+            </el-table-column>
         </el-table>
 
         <!--工具条-->
@@ -102,7 +102,7 @@
 
 <script>
     import util from '../../../util/date'
-    import {getBlogListPage} from '../../api/api';
+    import {getBlogListPage,removeBlog} from '../../api/api';
 
     export default {
         data() {
@@ -192,8 +192,8 @@
                 }).then(() => {
                     this.listLoading = true;
                     //NProgress.start();
-                    let para = {id: row.Id};
-                    removeModule(para).then((res) => {
+                    let para = {id: row.bID};
+                    removeBlog(para).then((res) => {
                         if (util.isEmt.format(res)) {
                             this.listLoading = false;
                             return;
@@ -221,8 +221,17 @@
             },
             //显示编辑界面
             handleEdit: function (index, row) {
-                this.editFormVisible = true;
-                this.editForm = Object.assign({}, row);
+                // this.editFormVisible = true;
+                // this.editForm = Object.assign({}, row);
+                console.log(row.bID)
+                this.$router.replace(`/Blog/Detail/${row.bID}`);
+
+
+                // this.$message({
+                //     message: "功能正在陆续开发中...",
+                //     type: 'error'
+                // });
+
             },
             //显示新增界面
             handleAdd() {

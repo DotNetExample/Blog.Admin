@@ -22,15 +22,19 @@ body {
     width: 100%;
 }
 .content-wrapper{
-    margin-bottom: 80px;
+    /*margin-bottom: 80px;*/
 }
 
 .content-expanded{
     max-width: calc(100% - 210px);
+    max-height: calc(100% - 60px);
 }
 .content-collapsed{
     max-width: 100%;
 
+}
+.el-scrollbar__wrap{
+    /*overflow-x: auto !important;*/
 }
 
 .container .header {
@@ -44,6 +48,7 @@ body {
     text-align: right;
     padding-right: 5px;
     float: right;
+    width: auto;
 }
 
 .container .header .userinfo .userinfo-inner {
@@ -208,11 +213,26 @@ body {
     margin-right: 10px;
     height: 100%;
     padding: 5px;
+    
+    overflow-y: auto;
 }
 .content-wrapper .tags{
-    margin-right: 20px;
+    padding-right: 20px;
 }
 .content-az section{
     overflow: auto;
     height: 100%;
+}
+.welcome-card{
+    width:30%;float:left;margin-right:10px;
+}
+@media screen and (max-width: 500px) {
+   
+    .welcome-card{
+        width:100%;
+    }
+}
+
+.scrollbar-handle.el-scrollbar > :first-child {
+    overflow-x: hidden !important;
 }
