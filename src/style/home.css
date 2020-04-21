@@ -85,7 +85,7 @@ body {
 }
 
 .container .header .logo-width {
-    width: 210px;
+    width: 211px;
 }
 
 .container .header .logo-collapse-width {
@@ -230,6 +230,10 @@ body {
    
     .welcome-card{
         width:100%;
+    }
+    .el-message-box{
+        margin-top: calc( 50% - 150px) !important;
+        max-width: 96% !important;
     }
 }
 

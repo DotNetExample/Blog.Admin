@@ -97,6 +97,9 @@ axios.interceptors.response.use(
     }
 );
 
+
+export const BaseApiUrl =base;
+
 // 登录
 export const requestLogin = params => {
     return axios.get(`${base}/api/login/jwttoken3.0`, {params: params}).then(res => res.data);
@@ -201,6 +204,9 @@ export const addModule = params => {
 export const getPermissionListPage = params => {
     return axios.get(`${base}/api/permission/get`, {params: params});
 };
+export const getPermissionTreeTable = params => {
+    return axios.get(`${base}/api/permission/GetTreeTable`, {params: params});
+};
 export const removePermission = params => {
     return axios.delete(`${base}/api/permission/delete`, {params: params});
 };
@@ -243,6 +249,12 @@ export const addBug = params => {
 export const getBlogListPage = params => {
     return axios.get(`${base}/api/Blog`, {params: params});
 };
+export const getBlogDeatil = params => {
+    return axios.get(`${base}/api/Blog/DetailNuxtNoPer`, {params: params});
+};
+export const editBlog = params => {
+    return axios.put(`${base}/api/Blog/update`, params);
+};
 export const removeBlog = params => {
     return axios.delete(`${base}/api/Blog/delete`, {params: params});
 };
@@ -250,4 +262,13 @@ export const removeBlog = params => {
 // 日志
 export const getLogs = params => {
     return axios.get(`${base}/api/Monitor/get`, {params: params});
+};
+export const getRequestApiinfoByWeek = params => {
+    return axios.get(`${base}/api/Monitor/GetRequestApiinfoByWeek`, {params: params});
+};
+export const getAccessApiByDate = params => {
+    return axios.get(`${base}/api/Monitor/GetAccessApiByDate`, {params: params});
+};
+export const getAccessApiByHour = params => {
+    return axios.get(`${base}/api/Monitor/GetAccessApiByHour`, {params: params});
 };

@@ -14,7 +14,7 @@
             </el-card>
 
         </el-col>
-        <el-col :span="16" class="toolbar perms">
+        <el-col :span="16" class="toolbar perms morechildren">
             <el-card class="box-card">
                 <div slot="header" class="clearfix">
                     <span>菜单</span>
@@ -119,6 +119,7 @@
             getRoles() {
                 getRoleListPage().then((res) => {
                     this.roles = res.data.response.data;
+                    this.getPermissions();
                 });
             },
             //获取菜单树
@@ -207,6 +208,8 @@
                     });
                 } else {
 
+                    this.loadingSaveStr='保存';
+                    this.loadingSave=false;
                     this.$message({
                         message: "参数错误",
                         type: 'error'
@@ -316,7 +319,7 @@
             this.loadingSave=true;
             this.loadingSaveStr='加载中...';
             this.getRoles();
-            this.getPermissions();
+            // this.getPermissions();
         }
     }
 
@@ -363,11 +366,16 @@
         width: 90%;
     }
 
-    .el-checkbox+.el-checkbox{
-        margin-left: 5px !important;
-    }
 
-    .el-checkbox{
+    .morechildren .el-checkbox{
         margin-right: 5px !important;
+        float: left;
+    }
+    .morechildren .el-checkbox-group{
+        margin-left: 50px;
+        padding: 5px;
+    }
+    .morechildren .el-tree-node__content{
+        height: auto !important;
     }
 </style>
