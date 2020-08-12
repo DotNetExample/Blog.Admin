@@ -4,6 +4,8 @@ import router from '../router/index'
 import store from "../store";
 import Vue from 'vue';
 
+import applicationUserManager from "../Auth/applicationusermanager";
+
 let base = '';
 // 如果是IIS部署，用这个，因为 IIS 只能是 CORS 跨域，不能代理
 // let base = process.env.NODE_ENV=="production"? 'http://localhost:8081':'';
@@ -64,14 +66,14 @@ axios.interceptors.response.use(
                                 type: 'success'
                             });
 
-                            store.commit("saveToken", res.token);
+                            store.commit("saveToken", res.response.token);
 
                             var curTime = new Date();
-                            var expiredate = new Date(curTime.setSeconds(curTime.getSeconds() + res.expires_in));
+                            var expiredate = new Date(curTime.setSeconds(curTime.getSeconds() + res.response.expires_in));
                             store.commit("saveTokenExpire", expiredate);
 
                             error.config.__isRetryRequest = true;
-                            error.config.headers.Authorization = 'Bearer ' + res.token;
+                            error.config.headers.Authorization = 'Bearer ' + res.response.token;
                             return axios(error.config);
                         } else {
                             // 刷新token失败 清除token信息并跳转到登录页面
@@ -88,6 +90,14 @@ axios.interceptors.response.use(
             if (error.response.status == 403) {
                 Vue.prototype.$message({
                     message: '失败！该操作无权限',
+                    type: 'error'
+                });
+                return null;
+            }
+            // 429 ip限流
+            if (error.response.status == 429) {
+                Vue.prototype.$message({
+                    message: '刷新次数过多，请稍事休息重试！',
                     type: 'error'
                 });
                 return null;
@@ -126,19 +136,25 @@ export const saveRefreshtime = params => {
     }
 };
  const ToLogin = params => {
+     
      store.commit("saveToken", "");
      store.commit("saveTokenExpire", "");
      store.commit("saveTagsData", "");
      window.localStorage.removeItem('user');
      window.localStorage.removeItem('NavigationBar');
 
-     router.replace({
-         path: "/login",
-         query: {redirect: router.currentRoute.fullPath}
-     });
+     
+                
+    if (global.IS_IDS4) {
+        applicationUserManager.login();
+    } else {
+        router.replace({
+            path: "/login",
+            query: {redirect: router.currentRoute.fullPath}
+        });
 
-      window.location.reload()
-
+        window.location.reload()
+    }
 };
 
 export const getUserByToken = params => {
@@ -271,4 +287,35 @@ export const getAccessApiByDate = params => {
 };
 export const getAccessApiByHour = params => {
     return axios.get(`${base}/api/Monitor/GetAccessApiByHour`, {params: params});
+};
+export const getServerInfo = params => {
+    return axios.get(`${base}/api/Monitor/Server`, {params: params});
+};
+export const getAccessLogs = params => {
+    return axios.get(`${base}/api/Monitor/GetAccessLogs`, {params: params});
+};
+
+
+// Task管理
+export const getTaskListPage = params => {
+    return axios.get(`${base}/api/TasksQz/get`, {params: params});
+};
+export const removeTask = params => {
+    return axios.delete(`${base}/api/TasksQz/delete`, {params: params});
+};
+export const editTask = params => {
+    return axios.put(`${base}/api/TasksQz/put`, params);
+};
+export const addTask = params => {
+    return axios.post(`${base}/api/TasksQz/post`, params);
+};
+
+export const startJob = params => {
+    return axios.get(`${base}/api/TasksQz/StartJob`, {params: params});
+};
+export const stopJob = params => {
+    return axios.get(`${base}/api/TasksQz/StopJob`, {params: params});
+};
+export const reCovery = params => {
+    return axios.get(`${base}/api/TasksQz/ReCovery`, {params: params});
 };

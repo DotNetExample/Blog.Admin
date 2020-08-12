@@ -2,11 +2,13 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '../views/Login.vue'
 import Welcome from '../views/Welcome'
-import Thanks from '../views/Thanks'
+import APIDoc from '../views/APIDoc'
 import NoPage from '../views/404'
 
 import Layout from "../views/Layout/Layout";
 const _import = require('@/router/_import_' + process.env.NODE_ENV)//获取组件的方法
+
+import LoginCallbackView from "../views/LoginCallbackView";
 
 Vue.use(Router)
 
@@ -25,9 +27,9 @@ const createRouter = () => new Router({
             hidden: true
         },
         {
-            path: '/Thanks', component: Thanks, name: 'Thanks',
+            path: '/APIDoc', component: APIDoc, name: 'APIDoc',
             meta: {
-                title: 'Thanks',
+                title: 'APIDoc',
                 requireAuth: false
             },
             hidden: true
@@ -54,6 +56,16 @@ const createRouter = () => new Router({
                 NoNeedHome: true // 添加该字段，表示不需要home模板
             },
             hidden: true
+        },
+        {
+          path: "/callback",
+          name: "LoginCallbackView",
+          component: LoginCallbackView,
+          meta: {
+              title: '登出',
+              NoTabPage: true,
+          },
+          hidden: true
         },
         {
             path: '*',
